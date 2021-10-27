@@ -1,0 +1,56 @@
+--Write a query to display the average price of books which is belonging to ‘JAVA’ category with alias name “AVERAGEPRICE”.
+
+select round(AVG(PRICE),2),category AS AVERAGEPRICE from LMS_BOOK_DETAILS     
+group by CATEGORY
+HAVING CATEGORY ='JAVA'
+
+
+
+
+
+--Write a query to display the supplier id, supplier name and email of the suppliers who are all having gmail account.
+
+select * from LMS_SUPPLIERS_DETAILS   
+
+select SUPPLIER_ID, SUPPLIER_NAME, EMAIL
+from lms_suppliers_details
+where lower(email) like '%@gmail.com'
+
+
+
+-- Write a query to display the supplier id, supplier name and contact details. 
+--Contact details can be either phone number or email or address with alias name “CONTACTDETAILS”.
+--If phone number is null then display email, even if email also null then display the address of the supplier. Hint: Use Coalesce function.
+
+select SUPPLIER_ID, SUPPLIER_NAME , coalesce(to_char(contact),email,address,'N/A') as CONTACTDETAILS
+from LMS_SUPPLIERS_DETAILS
+
+
+
+
+
+
+
+--Write a query to display the supplier id, supplier name and contact.  
+--If phone number is null then display ‘No’ else display ‘Yes’ with alias name “PHONENUMAVAILABLE”.
+
+select supplier_id,supplier_name,
+case 
+when contact is null 
+then 'No' 
+when contact is not null 
+then 'Yes' 
+end 
+as PHONENUMAVAILABLE
+from LMS_SUPPLIERS_DETAILS
+
+
+--Write a query to display the member id, member name, city and member status of members with the total fine paid by them with alias name “Fine”.
+
+select lm.MEMBER_ID, member_name, city, MEMBERSHIP_STATUS, sum(fine_amount) as Fine
+from LMS_MEMBERS lm inner join lms_book_issue lb on(lm.member_id =lb.member_id)
+inner join lms_fine_details lf on (lf.fine_range = lb.fine_range) 
+group by lm.member_id, member_name,city,MEMBERSHIP_STATUS
+
+
+
